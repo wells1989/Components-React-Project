@@ -1,70 +1,174 @@
-# Getting Started with Create React App
+# React Components
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This React Project built a number of components, with the aim being to be able to reutilize each of them in future projects. 
 
-## Available Scripts
+The components were given a baseline of styling, as the focus was more on functionality than styling because of this goal, as the components would be styled according to their specific purposes in future projects.
 
-In the project directory, you can run:
+## Installation / Setup
 
-### `npm start`
+```bash
+  "packages": {
+    "": {
+      "dependencies": {
+        "immer": "^10.0.3",
+        "react-icons": "^4.11.0",
+        "tailwind-merge": "^2.0.0"
+      }
+    },
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+cd comps
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+npm start
+```
 
-### `npm test`
+## Pages / Components
+### Dropdown
+![Screenshot (416)](https://github.com/wells1989/Components-React-Project/assets/122035759/bef5e340-a466-4b64-ab72-405d202ee8a6)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```javascript
+  const options = [
+    { label: "Red", value: 'red' },
+    { label: "Green", value: 'green'},
+    { label: "Blue", value: 'blue'},
+  ]
 
-### `npm run build`
+const [selection, setSelection] = useState(null);
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  const handleSelect = (option) => {
+    setSelection(option)
+  }
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+return <DropDown options={options} value={selection} onChange={handleSelect}/>
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Accordion
+![Screenshot (417)](https://github.com/wells1989/Components-React-Project/assets/122035759/f3f79c8b-d4cf-46ca-b3c9-e2eb859343e6)
 
-### `npm run eject`
+```javascript
+const items = [
+    {
+      id: 1,
+      label: "label 1",
+      content: "this is a test for content 1, writing it longer to check dropdown box sizing etc"
+    },
+    {
+      id: 2,
+      label: "label 2",
+      content: "this is a test for content 2, writing it longer to check dropdown box sizing etc"
+    },
+    {
+      id: 3,
+      label: "label 3",
+      content: "this is a test for content 3, writing it longer to check dropdown box sizing etc"
+    }
+  ];
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+return <Accordion items={items} />
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Buttons
+![Screenshot (419)](https://github.com/wells1989/Components-React-Project/assets/122035759/5cf16516-2af1-4cd1-80df-23f913279f0e)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### Button props
+- 1 of: primary / secondary / success / warning / danger
+- outline
+- rounded
+- onClick
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Example:
+```javascript
+return <Button className="flex justify-center" primary outline rounded onClick={handleClick}>
+```
 
-## Learn More
+### Modal
+![Screenshot (421)](https://github.com/wells1989/Components-React-Project/assets/122035759/93fe00bb-5a6c-4ede-b30b-81491b201b0d)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```javascript
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+const [showModal, setShowModal] = useState(false);
 
-### Code Splitting
+    const handleClick = () => {
+        setShowModal(!showModal)
+    }
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    const actionBar = <div className="flex m-3 absolute bottom-5 m-2 justify-between"  >
+                        <Button className="m-2" primary rounded onClick={handleClick}>I accept</Button>
+                        <Button className="m-2" danger rounded onClick={handleClick}>I Decline</Button>
+                    </div>
 
-### Analyzing the Bundle Size
+const modal = <Modal onClose={handleClick}
+        actionBar={actionBar}
+        >
+        <p>Please read and confirm the T + C before proceeding</p>
+        </Modal>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+    return (
+    <div>
+        <Button primary rounded onClick={handleClick}>Open Modal</Button>
+        {showModal && modal} 
+    </div>
+    )
+```
 
-### Making a Progressive Web App
+### Table 
+![Screenshot (422)](https://github.com/wells1989/Components-React-Project/assets/122035759/4434ead6-6c25-427c-90de-b02adb7859ed)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### With Sorting Mechanisms
+![Screenshot (423)](https://github.com/wells1989/Components-React-Project/assets/122035759/444eb023-7c63-4437-b78f-a7d33f5dcb3e)
+![Screenshot (424)](https://github.com/wells1989/Components-React-Project/assets/122035759/82f6675e-d298-4615-86f4-19c29a20537a)
 
-### Advanced Configuration
+```javascript
+const data = [
+        {name: "Orange", color: "bg-orange-500", score: 5},
+        {name: "Apple", color: "bg-red-500", score: 3},
+        {name: "Banana", color: "bg-yellow-500", score: 1},
+        {name: "Lime", color: "bg-green-500", score: 4},
+    ];
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    const config = [
+        { 
+            label: "Name", 
+            render: (fruit) => fruit.name,
+            sortValue: (fruit) => fruit.name
+        },
+        {
+            label: "Color",
+            render: (fruit) => <div className={`p-3 m-2 ${fruit.color}`} />
+        },
+        { 
+            label: "Score",
+            render: (fruit) => fruit.score,
+            sortValue: (fruit) => fruit.score 
+        }
+    ];
 
-### Deployment
+    const keyFn = (fruit) => {
+        return fruit.name;
+    };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+return <div>
+        <Table data={data} config={config} keyFn={keyFn}/>
+        <br></br>
+        <SortableTable data={data} config={config} keyFn={keyFn}/>
+        </div>
+}
+```
 
-### `npm run build` fails to minify
+### Counter
+![Screenshot (425)](https://github.com/wells1989/Components-React-Project/assets/122035759/a1987ebb-9c73-479e-a967-acefd1f39bd3)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Project aims / notes
+### Aims:
+1. To create a reusable set of components with full functionality
+2. To limit styling in order to allow future personalisation of the components
+3. To utilize and revise a number of advanced React concepts
+
+### Notes:
+- Due to the 3rd aim above, in certain areas components were created instead of using built in React functionality (for instance the useNavigation hook and the Link component were deliberately built to deepen my understanding of how these functions work in React.)
+- In addition, as the purpose of the project was to practice a range of React concepts, there is at times an inconsistency with some technologies used (for instance in the CounterPage.js file, which focused on useReducer instead of the other components, which utilized useState.)
